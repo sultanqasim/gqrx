@@ -313,7 +313,7 @@ MainWindow::MainWindow(const QString& cfgfile, bool edit_conf, QWidget *parent) 
     // I/Q playback
     connect(iq_tool, SIGNAL(startRecording(QString)), this, SLOT(startIqRecording(QString)));
     connect(iq_tool, SIGNAL(stopRecording()), this, SLOT(stopIqRecording()));
-    connect(iq_tool, SIGNAL(startPlayback(QString,float,qint64)), this, SLOT(startIqPlayback(QString,float,qint64)));
+    connect(iq_tool, SIGNAL(startPlayback(QString,float,qint64,bool)), this, SLOT(startIqPlayback(QString,float,qint64,bool)));
     connect(iq_tool, SIGNAL(stopPlayback()), this, SLOT(stopIqPlayback()));
     connect(iq_tool, SIGNAL(seek(qint64)), this,SLOT(seekIqFile(qint64)));
 
@@ -1710,7 +1710,8 @@ void MainWindow::stopIqRecording()
     ui->actionLoadSettings->setDisabled(false);
 }
 
-void MainWindow::startIqPlayback(const QString& filename, float samprate, qint64 center_freq)
+void MainWindow::startIqPlayback(const QString& filename, float samprate,
+                                 qint64 center_freq, bool repeat)
 {
     if (ui->actionDSP->isChecked())
     {
@@ -1724,8 +1725,8 @@ void MainWindow::startIqPlayback(const QString& filename, float samprate, qint64
     auto cf  = center_freq;
     double current_offset = rx->get_filter_offset();
     QString escapedFilename = receiver::escape_filename(filename.toStdString()).c_str();
-    auto devstr = QString("file=%1,rate=%2,freq=%3,throttle=true,repeat=false")
-            .arg(escapedFilename).arg(sri).arg(cf);
+    auto devstr = QString("file=%1,rate=%2,freq=%3,throttle=true,repeat=%4")
+            .arg(escapedFilename).arg(sri).arg(cf).arg(repeat?"true":"false");
 
     qDebug() << __func__ << ":" << devstr;
 

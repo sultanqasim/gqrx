@@ -122,7 +122,7 @@ void CIqTool::switchControlsState(enum IqToolState state)
     ui->listWidget->setEnabled(state == STATE_IDLE);
     ui->recDirEdit->setEnabled(state == STATE_IDLE);
     ui->recDirButton->setEnabled(state == STATE_IDLE);
-
+    ui->repeat->setEnabled(state == STATE_IDLE);
     ui->sampleRateSpinBox->setEnabled(state == STATE_IDLE);
     ui->centerFreqSpinBox->setEnabled(state == STATE_IDLE);
 }
@@ -154,7 +154,8 @@ void CIqTool::on_playButton_clicked(bool checked)
         {
             switchControlsState(STATE_PLAYING);
             emit startPlayback(recdir->absoluteFilePath(current_file),
-                               (float)playback_sample_rate, center_freq);
+                               (float)playback_sample_rate, center_freq,
+                               ui->repeat->checkState() == Qt::Checked);
         }
     }
     else

@@ -49,6 +49,8 @@ static const QStringList window_strs = {
 static const quint64 wf_span_table[] =
 {
     0,              // Auto
+    15*1000,        // 15 seconds
+    30*1000,        // 30 seconds
     1*60*1000,      // 1 minute
     2*60*1000,      // 2 minutes
     5*60*1000,      // 5 minutes
@@ -590,7 +592,7 @@ void DockFft::on_fftWinComboBox_currentIndexChanged(int index)
 /** Waterfall time span changed. */
 void DockFft::on_wfSpanComboBox_currentIndexChanged(int index)
 {
-    if (index < 0 || index > 14)
+    if (index < 0 || index > 16)
         return;
 
     emit wfSpanChanged(wf_span_table[index]);
@@ -601,7 +603,7 @@ void DockFft::setWfResolution(quint64 msec_per_line)
 {
     float res = 1.0e-3f * (float)msec_per_line;
 
-    ui->wfResLabel->setText(QString("Res: %1 s").arg((double)res, 0, 'f', 2));
+    ui->wfResLabel->setText(QString("Res: %1 s").arg((double)res, 0, 'f', 3));
 }
 
 /**
